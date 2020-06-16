@@ -10,5 +10,7 @@ npm-debug.*
 web-build/
 web-report/
 
+.vscode/
+
 # macOS
 .DS_Store
