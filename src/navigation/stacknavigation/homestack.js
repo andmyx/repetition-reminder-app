@@ -3,6 +3,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import StackHeaderStyles from "./stackheaderstyle";
 
+import Header from "../../shared/header";
+
 import Home from "../../screens/home";
 
 const Stack = createStackNavigator();
@@ -15,9 +17,7 @@ export default function homeStack() {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{
-          title: "Home Screen"
-        }} />
+        options={{ headerTitle: () => <Header text="Home Screen" /> }} />
     </Stack.Navigator>
   );
 }

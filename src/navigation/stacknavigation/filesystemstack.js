@@ -3,6 +3,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import StackHeaderStyle from "./stackheaderstyle";
 
+import Header from "../../shared/header";
+
 import FileSystem from "../../screens/filesystem";
 
 const Stack = createStackNavigator();
@@ -15,9 +17,7 @@ export default function homeStack() {
       <Stack.Screen
         name="Filesystem"
         component={FileSystem}
-        options={{
-          title: "Filesystem Screen"
-        }} />
+        options={{ headerTitle: () => <Header text="Filesystem Screen" /> }} />
     </Stack.Navigator>
   );
 }
