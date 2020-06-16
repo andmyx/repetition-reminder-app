@@ -1,17 +1,18 @@
 import React from "react";
-import { styleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
 export default function Home() {
-    return (
-        <View style={styles.container}>
-            <Text>This is the homescreen</Text>
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Text>This is the homescreen</Text>
+    </View>
+  );
 }
 
-const styles = styleSheet.create({
-    container: {
-        flex: 1,
-        backgroundcolor: "#ff00ff",
-    },
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ff00ff",
+    padding: 30,
+  },
 });
