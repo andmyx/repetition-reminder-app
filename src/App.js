@@ -1,8 +1,8 @@
 import React from "react";
-import Home from "./screens/home";
+import drawerNavigator from "./navigation/drawer";
 
 export default function App() {
   return (
-    <Home />
+    drawerNavigator()
   );
 }
