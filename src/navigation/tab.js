@@ -21,9 +21,9 @@ export default function drawerNavigator() {
             if (route.name === 'Home') {
               iconName = focused ? "md-home" : "md-home";
             } else if (route.name === "About") {
-              iconName = focused ? "ios-information-circle-outline" : "ios-information-circle-outline";
+              iconName = focused ? "ios-information-circle-outline" : "ios-information-circle";
             } else if (route.name === "Filesystem") {
-              iconName = focused ? "md-folder-open" : "md-folder-open";
+              iconName = focused ? "md-folder-open" : "md-folder";
             }
 
             // You can return any component that you like here!
