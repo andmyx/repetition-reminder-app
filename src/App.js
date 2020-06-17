@@ -1,8 +1,8 @@
 import React from "react";
-import drawerNavigator from "./navigation/drawer";
+import tabNavigator from "./navigation/tab";
 
 export default function App() {
   return (
-    drawerNavigator()
+    tabNavigator()
   );
 }
