@@ -3,8 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import StackHeaderStyles from "./stackheaderstyle";
 
-import Header from "../../shared/header";
-
 import Home from "../../screens/home";
 import ReminderCreate from "../../screens/reminderCreate";
 
@@ -18,10 +16,15 @@ export default function homeStack() {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ headerTitle: () => <Header text="Home Screen" /> }} />
+        options={{
+          title: "Home Screen"
+        }} />
       <Stack.Screen
         name="ReminderCreate"
-        component={ReminderCreate}/>
+        component={ReminderCreate}
+        options={{
+          title: "ReminderCreate Screen"
+        }} />
     </Stack.Navigator>
   );
 }
