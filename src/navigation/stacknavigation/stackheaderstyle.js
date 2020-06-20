@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 export default StackHeaderStyles = {
   headerStyle: {
-    backgroundColor: "#f0a0a0",
+    backgroundColor: "#00a0f0",
     height: 80,
   },
   headerTintColor: "#333333",

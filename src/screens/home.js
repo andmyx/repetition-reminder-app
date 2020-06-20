@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, Button} from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 
 export default function Home({ navigation }) {
 
@@ -10,7 +10,7 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>This is the homescreen</Text>
-      <Button title="Create a reminder" onPress={goToReminderCreate}/>
+      <Button title="Create a reminder" onPress={goToReminderCreate} />
     </View>
   );
 }
@@ -18,7 +18,7 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ff00ff",
+    backgroundColor: "#00f000",
     padding: 30,
   },
 });

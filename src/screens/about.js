@@ -12,7 +12,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ff00ff",
+    backgroundColor: "#f0f000",
     padding: 30,
   },
 });
