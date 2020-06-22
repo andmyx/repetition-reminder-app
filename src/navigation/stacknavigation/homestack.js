@@ -5,6 +5,7 @@ import StackHeaderStyles from "./stackheaderstyle";
 
 import Home from "../../screens/home";
 import ReminderCreate from "../../screens/reminderCreate";
+import inspectReminder from "../../screens/inspectReminder";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,12 @@ export default function homeStack() {
         component={ReminderCreate}
         options={{
           title: "ReminderCreate Screen"
+        }} />
+      <Stack.Screen
+        name="InspectReminder"
+        component={inspectReminder}
+        options={{
+          title: "InspectReminder screen"
         }} />
     </Stack.Navigator>
   );

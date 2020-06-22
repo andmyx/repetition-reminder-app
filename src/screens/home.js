@@ -33,14 +33,22 @@ export default function Home({ route, navigation }) {
     );
   }
 
+  function inspectReminder(index) {
+    navigation.navigate("InspectReminder", { values: reminders[index] })
+  }
+
+  function testfunction() {
+    console.log("TEST")
+  }
+
   return (
     <View style={styles.container}>
       <Text>This is the homescreen</Text>
       <Button title="Create a reminder" onPress={goToReminderCreate} />
       <FlatList
         data={reminders}
-        renderItem={({ item }) => (
-          <TouchableOpacity>
+        renderItem={({ item, index }) => (
+          <TouchableOpacity onPress={() => inspectReminder(index)}>
             {flatListItem(item.title)}
           </TouchableOpacity>
         )}
