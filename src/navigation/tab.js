@@ -19,7 +19,7 @@ export default function drawerNavigator() {
             let iconName;
 
             if (route.name === 'Home') {
-              iconName = focused ? "md-home" : "md-home";
+              iconName = focused ? "ios-home" : "md-home";
             } else if (route.name === "About") {
               iconName = focused ? "ios-information-circle-outline" : "ios-information-circle";
             } else if (route.name === "Filesystem") {
