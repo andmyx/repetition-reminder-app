@@ -1,12 +1,21 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity, DrawerLayoutAndroidBase } from "react-native";
+import * as SQLite from "expo-sqlite";
+import { AppLoading } from "expo";
+
+const db = SQLite.openDatabase("banan.db");
+
+function createDB() {
+  db.transaction(tx => {
+    tx.executeSql(
+      "create table if not exists reminders (id integer primary key not null, subject text, title text, body text);"
+    );
+  })
+}
 
 export default function Home({ route, navigation }) {
-  const [reminders, setReminders] = useState([
-    { subject: "subject1", title: "title1", body: "body1", key: "1" },
-    { subject: "subject2", title: "title2", body: "body2", key: "2" },
-    { subject: "subject3", title: "title3", body: "body3", key: "3" },
-  ]);
+  const [reminders, setReminders] = useState([]);
+  const [dbloaded, setdbloaded] = useState(false);
 
   React.useEffect(() => {
     if (route.params?.values) {
@@ -14,11 +23,30 @@ export default function Home({ route, navigation }) {
     }
   }, [route.params?.values]);
 
+
   function addReview(values) {
-    values.key = Math.random().toString();
-    setReminders((currentReminders) => {
-      return [values, ...currentReminders];
-    })
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          "insert into reminders (subject, title, body) values (?, ?, ?)",
+          [values.subject, values.title, values.body]
+        );
+      }
+    )
+  }
+
+  function loadDB() {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          "select * from reminders",
+          [],
+          (_, { rows: { _array } }) => {
+            setReminders(_array.reverse());
+          }
+        );
+      }
+    )
   }
 
   function goToReminderCreate() {
@@ -36,25 +64,33 @@ export default function Home({ route, navigation }) {
   function inspectReminder(index) {
     navigation.navigate("InspectReminder", { values: reminders[index] })
   }
+  if (dbloaded) {
 
-  function testfunction() {
-    console.log("TEST")
-  }
+    loadDB();
 
-  return (
-    <View style={styles.container}>
-      <Text>This is the homescreen</Text>
-      <Button title="Create a reminder" onPress={goToReminderCreate} />
-      <FlatList
-        data={reminders}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity onPress={() => inspectReminder(index)}>
-            {flatListItem(item.title)}
-          </TouchableOpacity>
-        )}
+    return (
+      <View style={styles.container}>
+        <Text>This is the homescreen</Text>
+        <Button title="Create a reminder" onPress={goToReminderCreate} />
+        <FlatList
+          data={reminders}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity onPress={() => inspectReminder(index)}>
+              {flatListItem(item.title)}
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.id.toString()}
+        />
+      </View>
+    );
+  } else {
+    return (
+      <AppLoading
+        startAsync={createDB}
+        onFinish={() => setdbloaded(true)}
       />
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
