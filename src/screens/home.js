@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity, DrawerLayoutAndroidBase } from "react-native";
+import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity } from "react-native";
 import * as SQLite from "expo-sqlite";
 import { AppLoading } from "expo";
 
