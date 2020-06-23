@@ -15,7 +15,7 @@ function createDB() {
 
 export default function Home({ route, navigation }) {
   const [reminders, setReminders] = useState([]);
-  const [dbloaded, setdbloaded] = useState(false);
+  const [dbCreated, setdbCreated] = useState(false);
 
   React.useEffect(() => {
     if (route.params?.values) {
@@ -64,7 +64,7 @@ export default function Home({ route, navigation }) {
   function inspectReminder(index) {
     navigation.navigate("InspectReminder", { values: reminders[index] })
   }
-  if (dbloaded) {
+  if (dbCreated) {
 
     loadDB();
 
@@ -87,7 +87,7 @@ export default function Home({ route, navigation }) {
     return (
       <AppLoading
         startAsync={createDB}
-        onFinish={() => setdbloaded(true)}
+        onFinish={() => setdbCreated(true)}
       />
     );
   }
