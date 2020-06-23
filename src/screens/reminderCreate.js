@@ -11,7 +11,6 @@ export default function ReminderCreate({ route, navigation }) {
         <Formik
           initialValues={{ subject: "", title: "", body: "" }}
           onSubmit={(values) => {
-            console.log(values);
             navigation.navigate("Home", { values: values });
           }}
         >
