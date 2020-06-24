@@ -3,6 +3,10 @@ import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity } from "reac
 import * as SQLite from "expo-sqlite";
 import { AppLoading } from "expo";
 
+import Card from "../shared/card";
+
+import globalStyles from "../styles/globalStyles";
+
 const db = SQLite.openDatabase("banan.db");
 
 function createDB() {
@@ -53,11 +57,13 @@ export default function Home({ route, navigation }) {
     navigation.push("ReminderCreate");
   }
 
-  function flatListItem(title) {
+  function flatListItem(subject, title, body) {
     return (
-      <View style={styles.item}>
-        <Text style={styles.text}>{title}</Text>
-      </View>
+      <Card>
+        <Text style={globalStyles.title}>{title}</Text>
+        <Text style={globalStyles.subject}>{subject}</Text>
+        <Text style={globalStyles.body}>{body}</Text>
+      </Card>
     );
   }
 
@@ -76,7 +82,7 @@ export default function Home({ route, navigation }) {
           data={reminders}
           renderItem={({ item, index }) => (
             <TouchableOpacity onPress={() => inspectReminder(index)}>
-              {flatListItem(item.title)}
+              {flatListItem(item.subject, item.title, item.body)}
             </TouchableOpacity>
           )}
           keyExtractor={item => item.id.toString()}
@@ -107,6 +113,6 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "bold",
     fontSize: 16,
-    color: "#ff0000",
-  }
+    color: "#333333",
+  },
 });
