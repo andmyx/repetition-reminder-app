@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Formik } from "formik";
 
 export default function ReminderCreate({ route, navigation }) {
+  const [tags, setTags] = useState([])
+
+  React.useEffect(() => {
+    if (route.params?.values) {
+      setTags(route.params.values);
+    }
+  }, [route.params?.values]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <Text>This is the reminder-create screen</Text>
         <Formik
-          initialValues={{ subject: "", title: "", body: "" }}
+          initialValues={{ subject: "", title: "", body: "", tags: [] }}
           onSubmit={(values) => {
             navigation.navigate("Home", { values: values });
           }}
@@ -35,6 +42,8 @@ export default function ReminderCreate({ route, navigation }) {
                 value={formikProps.values.body}
                 multiline
               />
+
+              <Button title="Add tags" onPress={() => navigation.navigate("TagCreate")} />
 
               <Button title="Submit" onPress={formikProps.handleSubmit} />
             </View>

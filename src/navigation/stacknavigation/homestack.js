@@ -6,6 +6,7 @@ import StackHeaderStyles from "./stackheaderstyle";
 import Home from "../../screens/home";
 import ReminderCreate from "../../screens/reminderCreate";
 import inspectReminder from "../../screens/inspectReminder";
+import tagCreate from "../../screens/tagCreate";
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,12 @@ export default function homeStack() {
         component={ReminderCreate}
         options={{
           title: "ReminderCreate Screen"
+        }} />
+      <Stack.Screen
+        name="TagCreate"
+        component={tagCreate}
+        options={{
+          title: "TagCreate Screen"
         }} />
       <Stack.Screen
         name="InspectReminder"
