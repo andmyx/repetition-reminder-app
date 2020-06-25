@@ -23,12 +23,12 @@ export default function Home({ route, navigation }) {
 
   React.useEffect(() => {
     if (route.params?.values) {
-      addReview(route.params.values);
+      addReminder(route.params.values);
     }
   }, [route.params?.values]);
 
 
-  function addReview(values) {
+  function addReminder(values) {
     db.transaction(
       tx => {
         tx.executeSql(
