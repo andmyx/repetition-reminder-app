@@ -7,12 +7,19 @@ import Card from "../shared/card";
 
 import globalStyles from "../styles/globalStyles";
 
-const db = SQLite.openDatabase("banan.db");
+const db = SQLite.openDatabase("bana.db");
 
 function createDB() {
+  // Create reminders table
   db.transaction(tx => {
     tx.executeSql(
-      "create table if not exists reminders (id integer primary key not null, subject text, title text, body text);"
+      "create table if not exists reminders (id integer primary key not null, subject text, title text, body text, tags text);"
+    );
+  })
+  // Create tags table
+  db.transaction(tx => {
+    tx.executeSql(
+      "create table if not exists tags (id integer primary key not null, name text);"
     );
   })
 }
@@ -32,8 +39,8 @@ export default function Home({ route, navigation }) {
     db.transaction(
       tx => {
         tx.executeSql(
-          "insert into reminders (subject, title, body) values (?, ?, ?)",
-          [values.subject, values.title, values.body]
+          "insert into reminders (subject, title, body, tags) values (?, ?, ?, ?)",
+          [values.subject, values.title, values.body, values.tags]
         );
       }
     )
