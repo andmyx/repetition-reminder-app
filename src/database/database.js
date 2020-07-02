@@ -30,14 +30,14 @@ function addReminderToDB(values) {
     )
 }
 
-function loadRemindersFromDB() {
+function loadRemindersFromDB(setFunc) {
     db.transaction(
         tx => {
             tx.executeSql(
                 "select * from reminders",
                 [],
                 (_, { rows: { _array } }) => {
-                    return (_array.reverse());
+                    setFunc(_array.reverse());
                 }
             );
         }
@@ -55,14 +55,14 @@ function addTagsToDB(values) {
     )
 }
 
-function loadTagsFromDB() {
+function loadTagsFromDB(setFunc) {
     db.transaction(
         tx => {
             tx.executeSql(
                 "select * from tags",
                 [],
                 (_, { rows: { _array } }) => {
-                    return (_array.reverse());
+                    setFunc(_array.reverse());
                 }
             )
         }
