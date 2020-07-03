@@ -1,6 +1,6 @@
 import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeStack from "./stacknavigation/homestack";
 import FileSystemStack from "./stacknavigation/filesystemstack";
@@ -18,7 +18,7 @@ export default function drawerNavigator() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === "Home") {
               iconName = focused ? "ios-home" : "md-home";
             } else if (route.name === "About") {
               iconName = focused ? "ios-information-circle-outline" : "ios-information-circle";
@@ -31,8 +31,8 @@ export default function drawerNavigator() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
+          activeTintColor: "tomato",
+          inactiveTintColor: "gray",
         }}
       >
         <Tab.Screen name="About" component={AboutStack} />
