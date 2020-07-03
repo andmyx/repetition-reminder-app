@@ -1,9 +1,19 @@
-import React from "react";
-import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, FlatList } from "react-native";
 import { Formik } from "formik";
 
+import { addTagsToDB, loadTagsFromDB } from "../database/database";
+
 export default function ReminderCreate({ route, navigation }) {
-  
+  const [tags, setTags] = useState([]);
+
+  function onSubmitHandler(values) {
+    addTagsToDB(values);
+    navigation.navigate("ReminderCreate")
+  }
+
+  loadTagsFromDB(setTags);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -11,7 +21,7 @@ export default function ReminderCreate({ route, navigation }) {
         <Formik
           initialValues={{ name: "" }}
           onSubmit={(values) => {
-            navigation.navigate("ReminderCreate", { values: values });
+            onSubmitHandler(values);
           }}
         >
           {(formikProps) => (
@@ -27,6 +37,13 @@ export default function ReminderCreate({ route, navigation }) {
             </View>
           )}
         </Formik>
+        <FlatList
+          data={tags}
+          renderItem={({ item }) => (
+            <Text>{item.name}</Text>
+          )}
+          keyExtractor={item => item.id.toString()}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

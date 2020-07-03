@@ -3,13 +3,6 @@ import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFe
 import { Formik } from "formik";
 
 export default function ReminderCreate({ route, navigation }) {
-  const [tags, setTags] = useState([])
-
-  React.useEffect(() => {
-    if (route.params?.values) {
-      setTags(route.params.values);
-    }
-  }, [route.params?.values]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
