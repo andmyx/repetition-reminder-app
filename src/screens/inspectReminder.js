@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { BaseRouter } from "@react-navigation/native";
+import { Text } from "react-native";
 
 import Card from "../shared/card";
 
