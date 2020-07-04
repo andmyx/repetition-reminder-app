@@ -3,8 +3,8 @@ import { StyleSheet, View } from "react-native";
 
 export default function Card(props) {
     return (
-        <View style={styles.card}>
-            <View style={styles.cardContent}>
+        <View style={[styles.card, props.cardStyle]}>
+            <View style={[styles.cardContent, props.contentStyle]}>
                 {props.children}
             </View>
         </View>
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
     },
     cardContent: {
         marginHorizontal: 18,
-        marginVertical: 13,
+        marginVertical: 12,
     },
 })
