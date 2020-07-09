@@ -45,14 +45,20 @@ function loadRemindersFromDB(setFunc) {
 }
 
 function addTagsToDB(values) {
+    // check for duplicates before insert
+    console.log("START");
     db.transaction(
         tx => {
             tx.executeSql(
-                "insert into tags (name) values (?)",
-                [values.name]
+                "insert into tags (name) select (?) where not exists (select 1 from tags where name = (?));",
+                [values.name, values.name],
+                (_, { rows: { _array } }) => {
+                    console.log(_array);
+                }
             );
         }
     )
+    console.log("SLUT");
 }
 
 function loadTagsFromDB(setFunc) {
