@@ -49,10 +49,7 @@ function addTagsToDB(values) {
         tx => {
             tx.executeSql(
                 "insert into tags (name) select (?) where not exists (select 1 from tags where name = (?));",
-                [values.name, values.name],
-                (_, { rows: { _array } }) => {
-                    console.log(_array);
-                }
+                [values.name, values.name]
             );
         }
     )
