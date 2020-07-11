@@ -3,6 +3,16 @@ import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFe
 import { Formik } from "formik";
 
 export default function ReminderCreate({ route, navigation }) {
+  const [tags, setTags] = useState([]);
+
+  React.useEffect(() => {
+    if (route.params?.tags) {
+      console.log("REMINDERCREATE");
+      let temp = route.params.tags;
+      setTags(route.params.tags);
+      console.log(temp);
+    }
+  }, [route.params?.tags]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -36,7 +46,7 @@ export default function ReminderCreate({ route, navigation }) {
                 multiline
               />
 
-              <Button title="Add tags" onPress={() => navigation.navigate("TagCreate")} />
+              <Button title="Add tags" onPress={() => navigation.navigate("TagCreate", { tags: tags })} />
 
               <Button title="Submit" onPress={formikProps.handleSubmit} />
             </View>

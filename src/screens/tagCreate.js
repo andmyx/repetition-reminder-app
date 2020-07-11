@@ -14,11 +14,25 @@ export default function ReminderCreate({ route, navigation }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
+  // this only runs once
+  React.useEffect(() => {
+    // if the user re-enters the tagCreate-screen
+    if (route.params?.tags) {
+      // then toggle all the previously selected tags 
+      // so that they are selected
+      console.log("TAGCREATE");
+      console.log(route.params.tags);
+      setSelectedTags(route.params.tags);
+    }
+  }, []);
+
   // modify upper left back-button
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <HeaderBackButton onPress={() => { navigation.navigate("ReminderCreate") }} tintColor="#333333" />
+        <HeaderBackButton
+          onPress={() => { navigation.navigate("ReminderCreate", { tags: selectedTags }) }}
+          tintColor="#333333" />
       )
     })
   })
@@ -31,9 +45,7 @@ export default function ReminderCreate({ route, navigation }) {
     if (selected) {
       // remove item from selectedTags
       let selectedTagsCopy = [...selectedTags];
-      console.log(selectedTagsCopy);
       let index = selectedTagsCopy.map(tag => tag.name).indexOf(item.name);
-      console.log(index);
 
       selectedTagsCopy.splice(index, 1);
 
@@ -83,6 +95,7 @@ export default function ReminderCreate({ route, navigation }) {
             // this is done here to avoid having to execute the same line
             // twice, once in toggleTagSelect and once to determine which
             // icon to use
+            // CHANGE to use .key instead of .name?
             let selected = selectedTags.map(tag => tag.name).includes(item.name);
 
             return (
