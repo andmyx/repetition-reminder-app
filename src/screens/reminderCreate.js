@@ -7,10 +7,7 @@ export default function ReminderCreate({ route, navigation }) {
 
   React.useEffect(() => {
     if (route.params?.tags) {
-      console.log("REMINDERCREATE");
-      let temp = route.params.tags;
       setTags(route.params.tags);
-      console.log(temp);
     }
   }, [route.params?.tags]);
 

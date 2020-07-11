@@ -20,8 +20,6 @@ export default function ReminderCreate({ route, navigation }) {
     if (route.params?.tags) {
       // then toggle all the previously selected tags 
       // so that they are selected
-      console.log("TAGCREATE");
-      console.log(route.params.tags);
       setSelectedTags(route.params.tags);
     }
   }, []);
