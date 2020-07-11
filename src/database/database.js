@@ -45,8 +45,6 @@ function loadRemindersFromDB(setFunc) {
 }
 
 function addTagsToDB(values) {
-    // check for duplicates before insert
-    console.log("START");
     db.transaction(
         tx => {
             tx.executeSql(
@@ -58,7 +56,6 @@ function addTagsToDB(values) {
             );
         }
     )
-    console.log("SLUT");
 }
 
 function loadTagsFromDB(setFunc) {
