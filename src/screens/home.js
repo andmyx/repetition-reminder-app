@@ -14,6 +14,9 @@ export default function Home({ route, navigation }) {
 
   React.useEffect(() => {
     if (route.params?.values) {
+      // don't know if this is necessary
+      let valuesCopy = route.params.values;
+      valuesCopy.tags = JSON.stringify(valuesCopy.tags);
       addReminderToDB(route.params.values);
     }
   }, [route.params?.values]);

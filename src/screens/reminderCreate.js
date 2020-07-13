@@ -16,9 +16,9 @@ export default function ReminderCreate({ route, navigation }) {
       <View style={styles.container}>
         <Text>This is the reminder-create screen</Text>
         <Formik
-          initialValues={{ subject: "", title: "", body: "", tags: [] }}
+          initialValues={{ subject: "", title: "", body: "" }}
           onSubmit={(values) => {
-            navigation.navigate("Home", { values: values });
+            navigation.navigate("Home", { values: { ...values, tags } });
           }}
         >
           {(formikProps) => (
