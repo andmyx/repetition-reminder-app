@@ -14,6 +14,13 @@ const globalStyles = StyleSheet.create({
     body: {
 
     },
+    tags: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+    },
+    tagsText: {
+        marginRight: 5
+    }
 });
 
 export default globalStyles;
