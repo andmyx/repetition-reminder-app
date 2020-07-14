@@ -18,8 +18,16 @@ export default function Home({ route, navigation }) {
       let valuesCopy = route.params.values;
       valuesCopy.tags = JSON.stringify(valuesCopy.tags);
       addReminderToDB(route.params.values);
+
+      // load again as new reminders has been added to the database
+      loadRemindersFromDB(setReminders);
     }
   }, [route.params?.values]);
+
+  function createAndLoadDB() {
+    createDB();
+    loadRemindersFromDB(setReminders);
+  }
 
   function goToReminderCreate() {
     navigation.push("ReminderCreate");
@@ -40,8 +48,6 @@ export default function Home({ route, navigation }) {
   }
   if (dbCreated) {
 
-    loadRemindersFromDB(setReminders);
-
     return (
       <View style={styles.container}>
         <Text>This is the homescreen</Text>
@@ -60,7 +66,7 @@ export default function Home({ route, navigation }) {
   } else {
     return (
       <AppLoading
-        startAsync={createDB}
+        startAsync={createAndLoadDB}
         onFinish={() => setdbCreated(true)}
       />
     );

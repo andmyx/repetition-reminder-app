@@ -16,9 +16,12 @@ export default function ReminderCreate({ route, navigation }) {
 
   // this only runs once
   React.useEffect(() => {
+    loadTagsFromDB(setTags);
+
+    // this evaluates to true 
     // if the user re-enters the tagCreate-screen
     if (route.params?.tags) {
-      // then toggle all the previously selected tags 
+      // toggle all the previously selected tags 
       // so that they are selected
       setSelectedTags(route.params.tags);
     }
@@ -37,6 +40,9 @@ export default function ReminderCreate({ route, navigation }) {
 
   function onSubmitHandler(values) {
     addTagsToDB(values);
+
+    // load tags again as new tags has been added to the database
+    loadTagsFromDB(setTags);
   }
 
   function toggleTagSelect(item, selected) {
@@ -57,10 +63,6 @@ export default function ReminderCreate({ route, navigation }) {
       return true;
     }
   }
-
-  // tried to use useEffect with cleanup to avoid component not mounted
-  // error but it did not work
-  loadTagsFromDB(setTags);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
