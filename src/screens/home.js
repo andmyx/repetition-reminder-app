@@ -14,12 +14,13 @@ export default function Home({ route, navigation }) {
 
   React.useEffect(() => {
     if (route.params?.values) {
-      // don't know if this is necessary
+      // don't know if creating the valuesCopy-variable is necessary
       let valuesCopy = route.params.values;
       valuesCopy.tags = JSON.stringify(valuesCopy.tags);
+
       addReminderToDB(route.params.values);
 
-      // load again as new reminders has been added to the database
+      // reload reminders as new reminders has been added to the database
       loadRemindersFromDB(setReminders);
     }
   }, [route.params?.values]);
