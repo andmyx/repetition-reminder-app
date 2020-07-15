@@ -22,6 +22,7 @@ export default function inspectReminder({ route, navigation }) {
                 <Text style={globalStyles.tagsText}>Tags:</Text>
                 {tagsTextList}
             </View>
+            <Text style={globalStyles.body}>{new Date(route.params.values.creationtime).toString()}</Text>
         </Card>
     );
 }
