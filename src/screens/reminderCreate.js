@@ -18,7 +18,14 @@ export default function ReminderCreate({ route, navigation }) {
         <Formik
           initialValues={{ subject: "", title: "", body: "" }}
           onSubmit={(values) => {
-            navigation.navigate("Home", { values: { ...values, tags } });
+            // the creation time could be calculated in the home-screen
+            // instead of being calculated here and then passed to the home-screen
+            // but it is done here to ease the implementation of a future
+            // feature where a user can manually select the creation date
+            // of their reminder
+            let creationTime = Date.now(); // this is unix time in miliseconds
+
+            navigation.navigate("Home", { values: { ...values, tags, creationTime } });
           }}
         >
           {(formikProps) => (
