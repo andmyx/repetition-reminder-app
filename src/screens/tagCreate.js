@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, FlatList, TouchableOpacity, RecyclerViewBackedScrollViewComponent } from "react-native";
 import { Formik } from "formik";
 
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -70,8 +70,10 @@ export default function ReminderCreate({ route, navigation }) {
         <Text>This is the tag-create screen</Text>
         <Formik
           initialValues={{ name: "" }}
-          onSubmit={(values) => {
+          onSubmit={(values, FormikBag) => {
             onSubmitHandler(values);
+
+            FormikBag.resetForm();
           }}
         >
           {(formikProps) => (
