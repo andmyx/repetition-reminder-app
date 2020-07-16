@@ -2,14 +2,32 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Formik } from "formik";
 
+import globalStyles from "../styles/globalStyles";
+
 export default function ReminderCreate({ route, navigation }) {
   const [tags, setTags] = useState([]);
+  const [tagsTextList, setTagsTextList] = useState([]);
 
   React.useEffect(() => {
     if (route.params?.tags) {
       setTags(route.params.tags);
     }
   }, [route.params?.tags]);
+
+  React.useEffect(() => {
+    setTagsTextList(tags.map((tag) =>
+      <Text key={tag.id} style={globalStyles.tagsText} > {tag.name},</ Text>
+    )
+    )
+  }, [tags])
+
+  function renderTags() {
+    if (tagsTextList.length > 0) {
+      return tagsTextList;
+    } else {
+      return <Text style={globalStyles.tagsText}>No tags selected</Text>
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -49,6 +67,11 @@ export default function ReminderCreate({ route, navigation }) {
                 value={formikProps.values.body}
                 multiline
               />
+
+              <View style={{ ...globalStyles.tags, justifyContent: "flex-start", marginTop: 10 }}>
+                <Text style={globalStyles.tagsText}>Tags:</Text>
+                {renderTags()}
+              </View>
 
               <Button title="Add tags" onPress={() => navigation.navigate("TagCreate", { tags: tags })} />
 
