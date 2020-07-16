@@ -8,7 +8,7 @@ function createDB() {
     // Create reminders table
     db.transaction(tx => {
         tx.executeSql(
-            "create table if not exists reminders (id integer primary key not null, subject text, title text, body text, tags text, creationtime integer);"
+            "create table if not exists reminders (id integer primary key not null, title text, body text, tags text, creationtime integer);"
         );
     })
     // Create tags table
@@ -23,8 +23,8 @@ function addReminderToDB(values) {
     db.transaction(
         tx => {
             tx.executeSql(
-                "insert into reminders (subject, title, body, tags, creationtime) values (?, ?, ?, ?, ?)",
-                [values.subject, values.title, values.body, values.tags, values.creationTime]
+                "insert into reminders (title, body, tags, creationtime) values (?, ?, ?, ?)",
+                [values.title, values.body, values.tags, values.creationTime]
             );
         }
     )

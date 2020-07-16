@@ -16,7 +16,6 @@ export default function inspectReminder({ route, navigation }) {
     return (
         <Card>
             <Text style={globalStyles.title}>{route.params.values.title}</Text>
-            <Text style={globalStyles.subject}>{route.params.values.subject}</Text>
             <Text style={globalStyles.body}>{route.params.values.body}</Text>
             <View style={globalStyles.tags}>
                 <Text style={globalStyles.tagsText}>Tags:</Text>

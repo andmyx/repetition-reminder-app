@@ -34,11 +34,10 @@ export default function Home({ route, navigation }) {
     navigation.push("ReminderCreate");
   }
 
-  function flatListItem(subject, title, body, tagsTextList) {
+  function flatListItem(title, body, tagsTextList) {
     return (
       <Card>
         <Text style={globalStyles.title}>{title}</Text>
-        <Text style={globalStyles.subject}>{subject}</Text>
         <Text style={globalStyles.body}>{body}</Text>
         <View style={globalStyles.tags}>
           <Text style={globalStyles.tagsText}>Tags:</Text>
@@ -70,7 +69,7 @@ export default function Home({ route, navigation }) {
 
             return (
               <TouchableOpacity onPress={() => inspectReminder(index)}>
-                {flatListItem(item.subject, item.title, item.body, tagsTextList)}
+                {flatListItem(item.title, item.body, tagsTextList)}
               </TouchableOpacity>
             );
           }}

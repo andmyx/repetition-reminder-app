@@ -6,11 +6,6 @@ const globalStyles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 18,
     },
-    subject: {
-        fontWeight: "500",
-        fontSize: 12,
-        marginBottom: 8,
-    },
     body: {
 
     },

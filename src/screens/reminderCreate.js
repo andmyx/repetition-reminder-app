@@ -34,7 +34,7 @@ export default function ReminderCreate({ route, navigation }) {
       <View style={styles.container}>
         <Text>This is the reminder-create screen</Text>
         <Formik
-          initialValues={{ subject: "", title: "", body: "" }}
+          initialValues={{ title: "", body: "" }}
           onSubmit={(values) => {
             // the creation time could be calculated in the home-screen
             // instead of being calculated here and then passed to the home-screen
@@ -48,12 +48,6 @@ export default function ReminderCreate({ route, navigation }) {
         >
           {(formikProps) => (
             <View>
-              <TextInput
-                style={styles.input}
-                placeholder="Subject"
-                onChangeText={formikProps.handleChange("subject")}
-                value={formikProps.values.subject}
-              />
               <TextInput
                 style={styles.input}
                 placeholder="Title"
