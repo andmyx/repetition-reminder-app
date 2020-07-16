@@ -17,9 +17,10 @@ const globalStyles = StyleSheet.create({
     tags: {
         flexDirection: "row",
         justifyContent: "flex-end",
+        flexWrap: "wrap",
     },
     tagsText: {
-        marginRight: 5
+        marginRight: 2
     }
 });
 
