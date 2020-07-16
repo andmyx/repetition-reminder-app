@@ -34,12 +34,16 @@ export default function Home({ route, navigation }) {
     navigation.push("ReminderCreate");
   }
 
-  function flatListItem(subject, title, body) {
+  function flatListItem(subject, title, body, tagsTextList) {
     return (
       <Card>
         <Text style={globalStyles.title}>{title}</Text>
         <Text style={globalStyles.subject}>{subject}</Text>
         <Text style={globalStyles.body}>{body}</Text>
+        <View style={globalStyles.tags}>
+          <Text style={globalStyles.tagsText}>Tags:</Text>
+          {tagsTextList}
+        </View>
       </Card>
     );
   }
@@ -55,11 +59,21 @@ export default function Home({ route, navigation }) {
         <Button title="Create a reminder" onPress={goToReminderCreate} />
         <FlatList
           data={reminders}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => inspectReminder(index)}>
-              {flatListItem(item.subject, item.title, item.body)}
-            </TouchableOpacity>
-          )}
+          renderItem={({ item, index }) => {
+
+            let tags = JSON.parse(item.tags);
+
+            let tagsTextList = tags.map((tag) =>
+              <Text key={tag.id} style={globalStyles.tagsText} > {tag.name},</ Text>
+            );
+            ;
+
+            return (
+              <TouchableOpacity onPress={() => inspectReminder(index)}>
+                {flatListItem(item.subject, item.title, item.body, tagsTextList)}
+              </TouchableOpacity>
+            );
+          }}
           keyExtractor={item => item.id.toString()}
         />
       </View>
