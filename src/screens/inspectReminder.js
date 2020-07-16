@@ -9,7 +9,7 @@ export default function inspectReminder({ route, navigation }) {
     let tags = JSON.parse(route.params.values.tags);
 
     let tagsTextList = tags.map((tag) =>
-        <Text key={tag.id} style={globalStyles.tagsText} > {tag.name}</ Text>
+        <Text key={tag.id} style={globalStyles.tagsText} > {tag.name},</ Text>
     );
     ;
 
