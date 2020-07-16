@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 export default function ReminderCreate({ route, navigation }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [filter, setFilter] = useState("");
 
   // this only runs once
   React.useEffect(() => {
@@ -45,6 +46,10 @@ export default function ReminderCreate({ route, navigation }) {
     loadTagsFromDB(setTags);
   }
 
+  function onChangeTextHandler(text) {
+    setFilter(text);
+  }
+
   function toggleTagSelect(item, selected) {
     if (selected) {
       // remove item from selectedTags
@@ -74,6 +79,9 @@ export default function ReminderCreate({ route, navigation }) {
             onSubmitHandler(values);
 
             FormikBag.resetForm();
+
+            // reset filter as the input field has been reset
+            setFilter("");
           }}
         >
           {(formikProps) => (
@@ -83,6 +91,9 @@ export default function ReminderCreate({ route, navigation }) {
                 placeholder="Add a tag..."
                 onChangeText={formikProps.handleChange("name")}
                 value={formikProps.values.name}
+                onChange={(values) => {
+                  onChangeTextHandler(values.nativeEvent.text);
+                }}
               />
 
               <Button title="Submit" onPress={formikProps.handleSubmit} />
@@ -90,7 +101,12 @@ export default function ReminderCreate({ route, navigation }) {
           )}
         </Formik>
         <FlatList
-          data={tags}
+          // if the input field is empty 
+          // all tags should be shown (filter evaluates to false)
+          // if something has been written in the input field
+          // then only the tags that include what has been written in 
+          // the input field should be shown
+          data={filter ? tags.filter(tag => (tag.name.includes(filter))) : tags}
           renderItem={({ item }) => {
 
             // check if the tag already exists in selectedTags
