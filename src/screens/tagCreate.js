@@ -14,6 +14,7 @@ export default function ReminderCreate({ route, navigation }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [filter, setFilter] = useState("");
+  const [nameOfNewTag, setNameOfNewTag] = useState("");
 
   // this only runs once
   React.useEffect(() => {
@@ -28,6 +29,13 @@ export default function ReminderCreate({ route, navigation }) {
     }
   }, []);
 
+  React.useEffect(() => {
+    if (nameOfNewTag != "") {
+      // the newest tag is at index 0
+      setSelectedTags([...selectedTags, tags[0]]);
+    }
+  }, [tags]);
+
   // modify upper left back-button
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -40,10 +48,14 @@ export default function ReminderCreate({ route, navigation }) {
   })
 
   function onSubmitHandler(values) {
-    addTagsToDB(values);
+    if (values.name != "") {
+      addTagsToDB(values);
 
-    // load tags again as new tags has been added to the database
-    loadTagsFromDB(setTags);
+      // load tags again as new tags has been added to the database
+      loadTagsFromDB(setTags);
+
+      setNameOfNewTag(values.name);
+    }
   }
 
   function onChangeTextHandler(text) {
