@@ -44,6 +44,17 @@ function loadRemindersFromDB(setFunc) {
     )
 }
 
+function deleteReminderFromDB(values) {
+    db.transaction(
+        tx => {
+            tx.executeSql(
+                "delete from reminders where id = (?)",
+                [values.id]
+            )
+        }
+    )
+}
+
 function addTagsToDB(values) {
     db.transaction(
         tx => {
@@ -69,4 +80,4 @@ function loadTagsFromDB(setFunc) {
     )
 }
 
-export { createDB, addReminderToDB, loadRemindersFromDB, addTagsToDB, loadTagsFromDB };
+export { createDB, addReminderToDB, loadRemindersFromDB, deleteReminderFromDB, addTagsToDB, loadTagsFromDB };

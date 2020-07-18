@@ -25,6 +25,14 @@ export default function Home({ route, navigation }) {
     }
   }, [route.params?.values]);
 
+  // a reminder has been deleted in inspectReminder
+  // and reminders should be loaded again
+  React.useEffect(() => {
+    if (route.params?.deletedReminderID) {
+      loadRemindersFromDB(setReminders);
+    }
+  }, [route.params?.deletedReminderID])
+
   function createAndLoadDB() {
     createDB();
     loadRemindersFromDB(setReminders);
