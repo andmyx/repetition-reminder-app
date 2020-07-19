@@ -29,6 +29,7 @@ export default function ReminderCreate({ route, navigation }) {
     }
   }, []);
 
+  // this runs if a new tag is submitted
   React.useEffect(() => {
     if (nameOfNewTag != "") {
       // the newest tag is at index 0
