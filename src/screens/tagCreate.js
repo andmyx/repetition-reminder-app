@@ -118,7 +118,7 @@ export default function ReminderCreate({ route, navigation }) {
           // if something has been written in the input field
           // then only the tags that include what has been written in 
           // the input field should be shown
-          data={filter ? tags.filter(tag => (tag.name.includes(filter))) : tags}
+          data={filter ? tags.filter(tag => (tag.name.toLowerCase().includes(filter.toLowerCase()))) : tags}
           renderItem={({ item }) => {
 
             // check if the tag already exists in selectedTags
