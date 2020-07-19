@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity } from "react-native";
 import { AppLoading } from "expo";
 
-import { createDB, addReminderToDB, loadRemindersFromDB, } from "../database/database";
+import { createDB, addReminderToDB, loadRemindersFromDB, } from "../../database/database";
 
-import Card from "../shared/card";
+import Card from "../../shared/card";
 
-import globalStyles from "../styles/globalStyles";
+import globalStyles from "../../styles/globalStyles";
 
 export default function Home({ route, navigation }) {
   const [reminders, setReminders] = useState([]);

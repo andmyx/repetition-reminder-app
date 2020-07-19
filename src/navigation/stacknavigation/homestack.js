@@ -3,10 +3,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import StackHeaderStyles from "./stackheaderstyle";
 
-import Home from "../../screens/home";
-import ReminderCreate from "../../screens/reminderCreate";
-import inspectReminder from "../../screens/inspectReminder";
-import tagCreate from "../../screens/tagCreate";
+import Home from "../../screens/homeStackScreens/home";
+import ReminderCreate from "../../screens/homeStackScreens/reminderCreate";
+import inspectReminder from "../../screens/homeStackScreens/inspectReminder";
+import tagCreate from "../../screens/homeStackScreens/tagCreate";
 
 const Stack = createStackNavigator();
 

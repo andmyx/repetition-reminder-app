@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import StackHeaderStyle from "./stackheaderstyle";
 
-import FileSystem from "../../screens/filesystem";
+import FileSystem from "../../screens/filesystemStackScreens/filesystem";
 
 const Stack = createStackNavigator();
 

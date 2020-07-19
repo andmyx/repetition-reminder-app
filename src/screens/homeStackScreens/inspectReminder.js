@@ -1,11 +1,11 @@
 import React from "react";
 import { Text, View, Button } from "react-native";
 
-import Card from "../shared/card";
+import Card from "../../shared/card";
 
-import { deleteReminderFromDB } from "../database/database";
+import { deleteReminderFromDB } from "../../database/database";
 
-import globalStyles from "../styles/globalStyles";
+import globalStyles from "../../styles/globalStyles";
 
 export default function inspectReminder({ route, navigation }) {
     let tags = JSON.parse(route.params.values.tags);

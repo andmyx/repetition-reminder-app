@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Formik } from "formik";
 
-import globalStyles from "../styles/globalStyles";
+import globalStyles from "../../styles/globalStyles";
 
 export default function ReminderCreate({ route, navigation }) {
   const [tags, setTags] = useState([]);

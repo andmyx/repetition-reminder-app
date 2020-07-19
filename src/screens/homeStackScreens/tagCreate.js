@@ -4,9 +4,9 @@ import { Formik } from "formik";
 
 import { HeaderBackButton } from "@react-navigation/stack";
 
-import { addTagsToDB, loadTagsFromDB } from "../database/database";
+import { addTagsToDB, loadTagsFromDB } from "../../database/database";
 
-import Card from "../shared/card";
+import Card from "../../shared/card";
 
 import { Ionicons } from "@expo/vector-icons";
 
