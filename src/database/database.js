@@ -55,29 +55,98 @@ function deleteReminderFromDB(values) {
     )
 }
 
-function addTagsToDB(values) {
+function addTagsToDB(newTag) {
     db.transaction(
         tx => {
             tx.executeSql(
                 "insert into tags (name) select (?) where not exists (select 1 from tags where name = (?));",
-                [values.name, values.name]
+                [newTag, newTag]
             );
         }
     )
 }
 
-function loadTagsFromDB(setFunc) {
+function newTagDBHandler(setTags, setSelectedTags, newTag, selectedTags) {
+    // insert the new tag into the DB if it doesn't exist
+    addTagsToDB(newTag);
+
+    // create a comma-seperated string of the names of 
+    // all of the selected tags including the new tag
+    let selectedTagsString = "";
+
+    // since we don't know the new tag's id 
+    // and we know that the DB doesn't contain duplicate tags
+    // I think it's ok to use the name of the tags as the 
+    // search parameter instead of the tags' id
+    for (let i = 0; i < selectedTags.length; i++) {
+        selectedTagsString = selectedTagsString.concat("'", selectedTags[i].name, "'", ",");
+    }
+
+    selectedTagsString = selectedTagsString.concat("'", newTag, "'");
+
+    // select all tags that aren't in selectedTags
     db.transaction(
         tx => {
             tx.executeSql(
-                "select * from tags",
+                `select * from tags except select * from tags where name in (${selectedTagsString}) order by (name) asc`,
                 [],
                 (_, { rows: { _array } }) => {
-                    setFunc(_array.reverse());
+                    setTags(_array);
+                }
+            )
+        }
+    )
+
+    // select all tags that are in selectedTags
+    db.transaction(
+        tx => {
+            tx.executeSql(
+                `select * from tags where (name) in (${selectedTagsString})`,
+                [],
+                (_, { rows: { _array } }) => {
+                    setSelectedTags(_array);
                 }
             )
         }
     )
 }
 
-export { createDB, addReminderToDB, loadRemindersFromDB, deleteReminderFromDB, addTagsToDB, loadTagsFromDB };
+function loadTagsFromDB(setTags, setSelectedTags, selectedTags) {
+    // create a comma-seperated string containing
+    // the id's of every selected tag
+    let selectedTagsString = "";
+
+    for (let i = 0; i < selectedTags.length; i++) {
+        selectedTagsString = selectedTagsString.concat(selectedTags[i].id, ",");
+    }
+
+    selectedTagsString = selectedTagsString.slice(0, -1);
+
+    // select all tags that aren't in selectedTags
+    db.transaction(
+        tx => {
+            tx.executeSql(
+                `select * from tags except select * from tags where id in (${selectedTagsString}) order by (name) asc`,
+                [],
+                (_, { rows: { _array } }) => {
+                    setTags(_array);
+                }
+            )
+        }
+    )
+
+    // select all tags that are in selectedTags
+    db.transaction(
+        tx => {
+            tx.executeSql(
+                `select * from tags where id in (${selectedTagsString}) order by (name) asc`,
+                [],
+                (_, { rows: { _array } }) => {
+                    setSelectedTags(_array);
+                }
+            )
+        }
+    )
+}
+
+export { createDB, addReminderToDB, loadRemindersFromDB, deleteReminderFromDB, newTagDBHandler, loadTagsFromDB };

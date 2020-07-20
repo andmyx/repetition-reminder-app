@@ -4,7 +4,7 @@ import { Formik } from "formik";
 
 import { HeaderBackButton } from "@react-navigation/stack";
 
-import { addTagsToDB, loadTagsFromDB } from "../../database/database";
+import { newTagDBHandler, loadTagsFromDB } from "../../database/database";
 
 import Card from "../../shared/card";
 
@@ -14,28 +14,11 @@ export default function ReminderCreate({ route, navigation }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [filter, setFilter] = useState("");
-  const [nameOfNewTag, setNameOfNewTag] = useState("");
 
   // this only runs once
   React.useEffect(() => {
-    loadTagsFromDB(setTags);
-
-    // this evaluates to true 
-    // if the user re-enters the tagCreate-screen
-    if (route.params?.tags) {
-      // toggle all the previously selected tags 
-      // so that they are selected
-      setSelectedTags(route.params.tags);
-    }
+    loadTagsFromDB(setTags, setSelectedTags, route.params.tags);
   }, []);
-
-  // this runs if a new tag is submitted
-  React.useEffect(() => {
-    if (nameOfNewTag != "") {
-      // the newest tag is at index 0
-      setSelectedTags([...selectedTags, tags[0]]);
-    }
-  }, [tags]);
 
   // modify upper left back-button
   React.useLayoutEffect(() => {
@@ -48,53 +31,57 @@ export default function ReminderCreate({ route, navigation }) {
     })
   })
 
-  function onSubmitHandler(values) {
-    if (values.name != "") {
-      addTagsToDB(values);
-
-      // load tags again as new tags has been added to the database
-      loadTagsFromDB(setTags);
-
-      setNameOfNewTag(values.name);
-    }
-  }
-
   function onChangeTextHandler(text) {
     setFilter(text);
   }
 
-  function toggleTagSelect(item, selected) {
-    if (selected) {
-      // remove item from selectedTags
-      let selectedTagsCopy = [...selectedTags];
-      let index = selectedTagsCopy.map(tag => tag.name).indexOf(item.name);
+  function markTagAsSelected(item) {
+    // add item to selectedTags
+    setSelectedTags([...selectedTags, item]);
 
-      selectedTagsCopy.splice(index, 1);
+    // remove item from tags
+    let tagsCopy = [...tags];
+    let index = tagsCopy.map(tag => tag.id).indexOf(item.id);
 
-      setSelectedTags(selectedTagsCopy);
+    tagsCopy.splice(index, 1);
 
-      return false;
-    } else {
-      // add item to selectedTags
-      setSelectedTags([...selectedTags, item]);
+    setTags(tagsCopy);
+  }
 
-      return true;
-    }
+  function unMarkTagAsSelected(item) {
+    // add item to tags
+    setTags([...tags, item]);
+    // sort the tags-list here?
+
+    // remove item from selectedTags
+    let selectedTagsCopy = [...selectedTags];
+    let index = selectedTagsCopy.map(tag => tag.name).indexOf(item.name);
+
+    selectedTagsCopy.splice(index, 1);
+
+    setSelectedTags(selectedTagsCopy);
   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+
         <Text>This is the tag-create screen</Text>
+
         <Formik
           initialValues={{ name: "" }}
           onSubmit={(values, FormikBag) => {
-            onSubmitHandler(values);
+            if (values.name != "") {
+              // creates the new tag if it doesn't already exist 
+              // and adds it to selectedTags
+              newTagDBHandler(setTags, setSelectedTags, values.name, selectedTags);
 
-            FormikBag.resetForm();
+              // clear the input-field
+              FormikBag.resetForm();
 
-            // reset filter as the input field has been reset
-            setFilter("");
+              // reset filter as the input field has been reset
+              setFilter("");
+            }
           }}
         >
           {(formikProps) => (
@@ -105,6 +92,8 @@ export default function ReminderCreate({ route, navigation }) {
                 onChangeText={formikProps.handleChange("name")}
                 value={formikProps.values.name}
                 onChange={(values) => {
+                  // update filter as the text in the 
+                  // input-box has changed
                   onChangeTextHandler(values.nativeEvent.text);
                 }}
               />
@@ -113,33 +102,47 @@ export default function ReminderCreate({ route, navigation }) {
             </View>
           )}
         </Formik>
-        <FlatList
-          // if the input field is empty 
-          // all tags should be shown (filter evaluates to false)
-          // if something has been written in the input field
-          // then only the tags that include what has been written in 
-          // the input field should be shown
-          data={filter ? tags.filter(tag => (tag.name.toLowerCase().includes(filter.toLowerCase()))) : tags}
-          renderItem={({ item }) => {
 
-            // check if the tag already exists in selectedTags
-            // this is done here to avoid having to execute the same line
-            // twice, once in toggleTagSelect and once to determine which
-            // icon to use
-            // CHANGE to use .key instead of .name?
-            let selected = selectedTags.map(tag => tag.name).includes(item.name);
+        <View style={styles.selectedTagsFlatlist}>
+          <FlatList
+            data={selectedTags}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity onPress={() => unMarkTagAsSelected(item)}>
+                  <Card cardStyle={{ backgroundColor: "#00f000" }} contentStyle={{ flexDirection: "row", marginHorizontal: 10 }}>
+                    <Ionicons name={"ios-checkbox-outline"} size={20} style={{ marginRight: 10 }} />
+                    <Text style={{ fontSize: 15 }}>{item.name}</Text>
+                  </Card>
+                </TouchableOpacity>
+              );
+            }}
+            keyExtractor={item => item.id.toString()}
+          />
+        </View>
 
-            return (
-              <TouchableOpacity onPress={() => toggleTagSelect(item, selected)}>
-                <Card contentStyle={{ flexDirection: "row", marginHorizontal: 10 }}>
-                  <Ionicons name={selected ? "ios-checkbox-outline" : "ios-square-outline"} size={20} style={{ marginRight: 10 }} />
-                  <Text style={{ fontSize: 15 }}>{item.name}</Text>
-                </Card>
-              </TouchableOpacity>
-            );
-          }}
-          keyExtractor={item => item.id.toString()}
-        />
+        <View style={styles.tagsFlatlist}>
+          <FlatList
+            // if the input field is empty 
+            // all tags should be shown (filter evaluates to false)
+            // if something has been written in the input field
+            // then only the tags that include what has been written in 
+            // the input field should be shown
+            data={filter ? tags.filter(tag => (tag.name.toLowerCase().includes(filter.toLowerCase()))) : tags}
+            renderItem={({ item }) => {
+
+              return (
+                <TouchableOpacity onPress={() => markTagAsSelected(item)}>
+                  <Card contentStyle={{ flexDirection: "row", marginHorizontal: 10 }}>
+                    <Ionicons name={"ios-square-outline"} size={20} style={{ marginRight: 10 }} />
+                    <Text style={{ fontSize: 15 }}>{item.name}</Text>
+                  </Card>
+                </TouchableOpacity>
+              );
+            }}
+            keyExtractor={item => item.id.toString()}
+          />
+        </View>
+
       </View>
     </TouchableWithoutFeedback>
   );
@@ -158,5 +161,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 10,
     marginTop: 10,
-  }
+  },
+  selectedTagsFlatlist: {
+    marginVertical: 10
+  },
+  tagsFlatlist: {
+    paddingBottom: 110,
+  },
 });
