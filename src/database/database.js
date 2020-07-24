@@ -68,7 +68,7 @@ function loadRemindersFromDB(setFunc) {
     db.transaction(
         tx => {
             tx.executeSql(
-                "select r.id, r.title, r.body, r.creationtime, group_concat(t.name) as tags from reminders as r join remindersToTags on r.id = reminderID join tags as t on t.id = tagID group by r.id order by r.id desc;",
+                "select r.id, r.title, r.body, r.creationtime, group_concat(t.name) as tags from reminders as r left join remindersToTags on r.id = reminderID left join tags as t on t.id = tagID group by r.id order by r.id desc;",
                 [],
                 (_, { rows: { _array } }) => {
                     setFunc(_array);
