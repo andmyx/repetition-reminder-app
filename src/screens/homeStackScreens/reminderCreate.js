@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Formik } from "formik";
 
+import { createNewReminder } from "../../database/database";
+
 import globalStyles from "../../styles/globalStyles";
 
 export default function ReminderCreate({ route, navigation }) {
@@ -43,7 +45,12 @@ export default function ReminderCreate({ route, navigation }) {
             // of their reminder
             let creationTime = Date.now(); // this is unix time in miliseconds
 
-            navigation.navigate("Home", { values: { ...values, tags, creationTime } });
+            createNewReminder(values, creationTime, tags);
+
+            // loadReminders are used to trigger useEffect in Home-screen
+            // loadReminders has the value: creationTime because the useEffect only triggers
+            // when loadReminders changes value.
+            navigation.navigate("Home", { loadReminders: creationTime });
           }}
         >
           {(formikProps) => (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, FlatList, TouchableOpacity } from "react-native";
 import { AppLoading } from "expo";
 
-import { createDB, addReminderToDB, loadRemindersFromDB, } from "../../database/database";
+import { createDB, loadRemindersFromDB } from "../../database/database";
 
 import Card from "../../shared/card";
 
@@ -13,17 +13,8 @@ export default function Home({ route, navigation }) {
   const [dbCreated, setdbCreated] = useState(false);
 
   React.useEffect(() => {
-    if (route.params?.values) {
-      // don't know if creating the valuesCopy-variable is necessary
-      let valuesCopy = route.params.values;
-      valuesCopy.tags = JSON.stringify(valuesCopy.tags);
-
-      addReminderToDB(route.params.values);
-
-      // reload reminders as new reminders has been added to the database
-      loadRemindersFromDB(setReminders);
-    }
-  }, [route.params?.values]);
+    loadRemindersFromDB(setReminders);
+  }, [route.params?.loadReminders]);
 
   // a reminder has been deleted in inspectReminder
   // and reminders should be loaded again
@@ -42,14 +33,13 @@ export default function Home({ route, navigation }) {
     navigation.push("ReminderCreate");
   }
 
-  function flatListItem(title, body, tagsTextList) {
+  function flatListItem(title, body, tags) {
     return (
       <Card>
         <Text style={globalStyles.title}>{title}</Text>
         <Text style={globalStyles.body}>{body}</Text>
         <View style={globalStyles.tags}>
-          <Text style={globalStyles.tagsText}>Tags:</Text>
-          {tagsTextList}
+          <Text style={globalStyles.tagsText}>Tags: {tags}</Text>
         </View>
       </Card>
     );
@@ -68,16 +58,9 @@ export default function Home({ route, navigation }) {
           data={reminders}
           renderItem={({ item, index }) => {
 
-            let tags = JSON.parse(item.tags);
-
-            let tagsTextList = tags.map((tag) =>
-              <Text key={tag.id} style={globalStyles.tagsText} > {tag.name},</ Text>
-            );
-            ;
-
             return (
               <TouchableOpacity onPress={() => inspectReminder(index)}>
-                {flatListItem(item.title, item.body, tagsTextList)}
+                {flatListItem(item.title, item.body, item.tags)}
               </TouchableOpacity>
             );
           }}

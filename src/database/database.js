@@ -1,4 +1,3 @@
-import React from "react";
 import * as SQLite from "expo-sqlite";
 
 let db = SQLite.openDatabase("testdatabas.db");
@@ -8,7 +7,7 @@ function createDB() {
     // Create reminders table
     db.transaction(tx => {
         tx.executeSql(
-            "create table if not exists reminders (id integer primary key not null, title text, body text, tags text, creationtime integer);"
+            "create table if not exists reminders (id integer primary key not null, title text, body text, creationtime integer);"
         );
     })
     // Create tags table
@@ -17,27 +16,62 @@ function createDB() {
             "create table if not exists tags (id integer primary key not null, name text);"
         );
     })
+    // create remindersToTags table
+    db.transaction(tx => {
+        tx.executeSql(
+            "create table if not exists remindersToTags (id integer primary key not null, reminderID integer, tagID integer);"
+        );
+    })
 }
 
-function addReminderToDB(values) {
+function addReminderToDB(values, creationTime) {
     db.transaction(
         tx => {
             tx.executeSql(
-                "insert into reminders (title, body, tags, creationtime) values (?, ?, ?, ?)",
-                [values.title, values.body, values.tags, values.creationTime]
+                "insert into reminders (title, body, creationtime) values (?, ?, ?)",
+                [values.title, values.body, creationTime]
             );
         }
     )
+}
+
+function createNewReminder(values, creationTime, tags) {
+    addReminderToDB(values, creationTime);
+
+    let sqlStatement = "";
+
+    for (i = 0; i < tags.length; i++) {
+        let tagID = tags[i].id;
+
+        sqlStatement = sqlStatement.concat("select max(reminders.id), tags.id from reminders join tags where tags.id = ", tagID, " ");
+
+        if (i != tags.length - 1) {
+            sqlStatement = sqlStatement.concat("UNION ALL ");
+        }
+    }
+
+    // create connection between the new reminder and each of its tags
+    db.transaction(
+        tx => {
+            tx.executeSql(
+                `insert into remindersToTags (reminderID, tagID) ${sqlStatement}`,
+                [],
+                (_, { rows: { _array } }) => {
+                }
+            )
+        }
+    )
+
 }
 
 function loadRemindersFromDB(setFunc) {
     db.transaction(
         tx => {
             tx.executeSql(
-                "select * from reminders",
+                "select r.id, r.title, r.body, r.creationtime, group_concat(t.name) as tags from reminders as r join remindersToTags on r.id = reminderID join tags as t on t.id = tagID group by r.id order by r.id desc;",
                 [],
                 (_, { rows: { _array } }) => {
-                    setFunc(_array.reverse());
+                    setFunc(_array);
                 }
             );
         }
@@ -149,4 +183,4 @@ function loadTagsFromDB(setTags, setSelectedTags, selectedTags) {
     )
 }
 
-export { createDB, addReminderToDB, loadRemindersFromDB, deleteReminderFromDB, newTagDBHandler, loadTagsFromDB };
+export { createDB, addReminderToDB, createNewReminder, loadRemindersFromDB, deleteReminderFromDB, newTagDBHandler, loadTagsFromDB };
